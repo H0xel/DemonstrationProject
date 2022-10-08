@@ -17,7 +17,6 @@ final class MainErrorView: UIView {
         let label = UILabel()
         label.textColor = .black
         label.font = .systemFont(ofSize: 18)
-        label.text = "Oups, something goes wrong!"
         return label
     }()
 
@@ -58,6 +57,24 @@ final class MainErrorView: UIView {
 
     @objc private func reload() {
         _events.send(.reload)
+    }
+}
+
+extension MainErrorView {
+    enum ViewState {
+        case noInternetError
+        case expiredURL
+    }
+
+    func render(_ viewState: ViewState) {
+        switch viewState {
+        case .noInternetError:
+            _label.text = "Oups, something goes wrong!"
+            _button.isHidden = false
+        case .expiredURL:
+            _label.text = "URL expired :("
+            _button.isHidden = true
+        }
     }
 }
 

@@ -9,8 +9,13 @@ enum MainConverter {
             return .loading
         case let .loaded(beer):
             return .loaded(beer)
-        case .error:
-            return .error
+        case let .error(errorState):
+            switch errorState {
+            case .noInternet:
+                return .error(.noInternet)
+            case .expiredURL:
+                return .error(.expiredURL)
+            }
         }
     }
 }
