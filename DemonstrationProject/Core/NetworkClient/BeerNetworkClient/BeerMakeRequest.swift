@@ -5,8 +5,11 @@ import Combine
 
 extension NetworkClient {
     func makeBeerRequest<Response: Decodable>() -> AnyPublisher<Response, NetworkError> {
-        let url = URL(string: "https://api.punkapi.com/v2/beers")!
-        return getRequest(url: url)
+        guard let urlRequest: URLRequest = .init(request: BeerRequest()) else {
+            return Fail(outputType: Response.self, failure: NetworkError.expiredURL)
+                .eraseToAnyPublisher()
+        }
+        return getRequest(urlRequest: urlRequest)
             .eraseToAnyPublisher()
     }
 }

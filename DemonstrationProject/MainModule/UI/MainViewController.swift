@@ -54,7 +54,7 @@ extension MainViewController {
     enum ViewState {
         case loading
         case loaded([Beer])
-        case error
+        case error(ErrorState)
     }
     
     func render(_ viewState: ViewState) {
@@ -63,8 +63,20 @@ extension MainViewController {
             _viewContainer.render(.loading)
         case let .loaded(beer):
             _viewContainer.render(.loaded(beer))
-        case .error:
-            _viewContainer.render(.error)
+        case let .error(errorState):
+            switch errorState {
+            case .noInternet:
+                _viewContainer.render(.error(.noInternet))
+            case .expiredURL:
+                _viewContainer.render(.error(.expiredURL))
+            }
         }
+    }
+}
+
+extension MainViewController.ViewState {
+    enum ErrorState {
+        case noInternet
+        case expiredURL
     }
 }
